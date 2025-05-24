@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class GameManager : MonoSingleton<GameManager>
 {
-    [Header("OBSTACLE")]
-    [SerializeField] private float _obstacleSpeed = 1;
-    [SerializeField] private float _obstacleInterval = 1;
+    [SerializeField] private float _timeSacle = 1;
+    public float TimeSacle { get => _timeSacle; set => _timeSacle = value; }
 
-
-    public float ObstacleSpeed { get => _obstacleSpeed; set => _obstacleSpeed = value; }
-    public float ObstacleInterval { get => _obstacleInterval; set => _obstacleInterval = value; }
+    private void Start()
+    {
+        StateManager.Instance.SwitchState(StateManager.GameState.Home);
+    }
+    public void SetPaused(bool value)
+    {
+        Debug.Log($"PAUSED: {value}");
+        Time.timeScale = value ? 0 : _timeSacle;
+    }
 }

@@ -5,13 +5,37 @@ using System;
 
 public class Obstacle : MonoBehaviour
 {
-    private void Update()
-    {
-        transform.position += Vector3.left * GameManager.Instance.ObstacleSpeed * Time.deltaTime;
+    protected Coroutine _movementCoroutine;
 
-        if(transform.position.x <= -13)
+    protected void OnDestroy()
+    {
+        if (_movementCoroutine != null)
         {
-            Destroy(gameObject, 0.1f);
+            StopCoroutine(_movementCoroutine);
+            _movementCoroutine = null;
+        }
+    }
+    public virtual void Init()
+    {
+        if(_movementCoroutine != null)
+        {
+            StopCoroutine(_movementCoroutine);
+            _movementCoroutine = null;
+        }
+        _movementCoroutine = StartCoroutine(ObstacleMovement());
+    }
+    protected virtual IEnumerator ObstacleMovement()
+    {
+        while (StateManager.Instance.gameState == StateManager.GameState.Play)
+        {
+            transform.position += Vector3.left * ObstacleManager.Instance.ObstacleSpeed * Time.deltaTime;
+
+            if (transform.position.x <= -13)
+            {
+                Destroy(gameObject, 0.1f);
+            }
+
+            yield return new WaitForEndOfFrame();
         }
     }
 }
