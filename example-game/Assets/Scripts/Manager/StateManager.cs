@@ -11,7 +11,10 @@ public class StateManager : MonoSingleton<StateManager>
         Lose
     }
 
-    public GameState gameState; 
+    public GameState gameState;
+
+
+    private Coroutine _onPlayCorroutine;
 
     public void SwitchState(GameState state)
     {
@@ -45,6 +48,8 @@ public class StateManager : MonoSingleton<StateManager>
         GameManager.Instance.SetPaused(false);
         HomeUI.Instance.ToggleHomeUI(false);
         PlayerController.Instance.ResetPlayer();
+        ScoreManager.Instance.ResetScore();
+        ObstacleManager.Instance.ResetObstacle();
         ObstacleManager.Instance.SpwanObstacle();
     }
     

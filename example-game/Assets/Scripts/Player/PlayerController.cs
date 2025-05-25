@@ -6,7 +6,7 @@ using System;
 public class PlayerController : MonoSingleton<PlayerController>
 {
     [SerializeField] private float _jumpVelocity = 8;
-    [SerializeField] private float _torque = 50;
+    [SerializeField] private float _torque = 80;
 
     [SerializeField] private float _maximumRotation = 60;
     [SerializeField] private float _minimumRotation = -70;
@@ -47,7 +47,14 @@ public class PlayerController : MonoSingleton<PlayerController>
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        StateManager.Instance.SwitchState(StateManager.GameState.Lose);
+        if (collision.gameObject.CompareTag(GameManager.OBSTACLE_TAG_NAME))
+        {
+            StateManager.Instance.SwitchState(StateManager.GameState.Lose);
+        }
+        else if (collision.gameObject.CompareTag(GameManager.CHECKPOINT_TAG_NAME))
+        {
+            ScoreManager.Instance.AddScore();
+        }
     }
     private IEnumerator RotationCoroutine()
     {
